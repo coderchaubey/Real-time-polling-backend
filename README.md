@@ -32,7 +32,7 @@ The backend provides RESTful APIs for users, polls, and votes, and real-time upd
 
 ### 1. Clone the repository
 - Link: [https://github.com/coderchaubey/Real-time-polling-backend.git]
-- cd move37_backend
+- cd Real-time-polling-backend
 
 ### 2. Install dependencies
 - npm install
