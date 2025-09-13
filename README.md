@@ -39,7 +39,7 @@ The backend provides RESTful APIs for users, polls, and votes, and real-time upd
 
 ### 3. Setup environment variables
 - Create a **.env** file and paste the following with your own USER, PASSWORD and DB as needed:
-- DATABASE_URL="postgresql://<USER>:<PASSWORD>@localhost:5432/<DB>"
+- DATABASE_URL="postgresql://USER:PASSWORD@localhost:5432/DB"
 
 ### 4. Generate Prisma client & migrate
 - npx prisma generate
@@ -67,7 +67,7 @@ The backend provides RESTful APIs for users, polls, and votes, and real-time upd
 
 ### For getting users
 <details>
-<summary><code>GET</code> <code>/users/getuser</code> - Get all users</summary>
+<summary><code>GET</code> <code>/users</code> - Get all users</summary>
 
 **Response:**
 [
