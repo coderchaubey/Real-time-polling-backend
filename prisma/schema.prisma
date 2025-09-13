@@ -1,0 +1,63 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+//MODELS
+
+model User {
+  id Int @id @default(autoincrement())
+  name String
+  email String @unique
+  passwordHash String
+
+  //Relations
+  polls Poll[] //One-to-many relation (User -> Polls)
+  votes Vote[] //For Many-to-many relation (Multiple_User -> Multiple_PollOptions -> Multiple_votes)
+}
+
+model Poll {
+  id Int @id @default(autoincrement())
+  question String
+  isPublished Boolean @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  //Relations
+  creatorId Int //Foreign key (Points to User.Id)
+  creator User @relation(fields: [creatorId], references: [id]) //each poll -> one User
+  options PollOption[] //Poll -> multiple PollOptions (one-to-many relation)
+}
+
+model PollOption {
+  id Int @id @default(autoincrement())
+  text String
+
+  //Relations
+  pollId Int //Foreign key (Points to the Poll.id)
+  poll Poll @relation(fields: [pollId], references: [id]) //many-to-one relation
+  votes Vote[] // many users can vote on this option
+}
+
+model Vote {
+  id Int @id @default(autoincrement())
+
+  //Many-to-Many via join table
+  userId Int //Foreign key
+  pollOptionId Int //Foreign key
+
+  user User @relation(fields: [userId], references: [id])
+  pollOption PollOption @relation(fields: [pollOptionId], references: [id])
+
+  @@unique([userId, pollOptionId]) //Preventing same user from voting more than once on same options
+}

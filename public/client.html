@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <script src="/socket.io/socket.io.js"></script>
+  </head>
+  <body>
+    <h1>Live poll result</h1>
+    <input id="pollId" type="number" placeholder="Enter Poll ID"/>
+    <button onclick="joinPoll()">Join Poll</button>
+
+    <pre id="output"></pre>
+    <script>
+      const socket = io(); //Connected the socket to express server
+
+      const output = document.getElementById("output");
+
+      socket.on("connect", () => {
+        log("Connected:" + socket.id);
+      });
+
+      socket.on("voteUpdate", (data) => {
+        log("Live update:" + JSON.stringify(data, null, 2));
+      });
+
+      function joinPoll(){
+        const pollId = document.getElementById("pollId").value;
+        if(pollId){
+          socket.emit("joinPoll", parseInt(pollId));
+          log(`Joined poll ${pollId}`);
+        }
+      }
+
+      function log(msg){
+        output.textContent = msg + "\n";
+      }
+    </script>
+  </body>
+</html>
